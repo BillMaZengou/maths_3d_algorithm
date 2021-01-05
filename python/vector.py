@@ -1,3 +1,5 @@
+import math_tools as maths
+
 class vector_3d(object):
     """create a vector in 3d"""
 
@@ -47,6 +49,9 @@ class vector_3d(object):
         else:
             return False
 
+    def __abs__(self):
+        return maths.Sqrt(self.x*self.x + self.y*self.y + self.z*self.z)
+
     def transpose(self):
         self.ifTransposed = not self.ifTransposed
 
@@ -55,11 +60,17 @@ def main():
     Q = vector_3d(2, 2, 2)
     print( (P + Q) == (Q + P) )
     R = vector_3d(3, 3, 3)
-    print( ((P + Q) + R) == (P + (Q + R)) )
+    print( ((P+Q) + R) == (P + (Q+R)) )
     a = 2
     b = 3
     print( ((a*b) * P) == (a * (b*P)) )
-
+    print( (a * (P+Q)) == (a*P + a*Q) )
+    print( ((a+b) * P) == (a*P + b*P) )
+    print(abs(-3))
+    V = vector_3d(3, 4, 0)
+    print(abs(V))
+    print(abs(a*V) == abs(a)*abs(V))
+    print(abs(P+Q) <= abs(P) + abs(Q))
 
 if __name__ == '__main__':
     main()
