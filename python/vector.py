@@ -51,9 +51,14 @@ class vector_3d(object):
         self.ifTransposed = not self.ifTransposed
 
 def main():
-    a = vector_3d(1, 1, 1)
-    b = vector_3d(2, 2, 2)
-    print((a + b) == (b + a))
+    P = vector_3d(1, 1, 1)
+    Q = vector_3d(2, 2, 2)
+    print( (P + Q) == (Q + P) )
+    R = vector_3d(3, 3, 3)
+    print( ((P + Q) + R) == (P + (Q + R)) )
+    a = 2
+    b = 3
+    print( ((a*b) * P) == (a * (b*P)) )
 
 
 if __name__ == '__main__':
