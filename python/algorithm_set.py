@@ -6,14 +6,14 @@ def triangle_area(p1, p2, p3):
     v2 = p3 - p1
     return 1/2 * abs(v1.cross(v2))
 
-def normalization(vectors):
-    """ Gram-Schmidt Normalisation """
-    assert len(vectors) > 2
+def orthonormal_basis(vectors, dimension=3):
+    """ Gram-Schmidt Process """
+    assert len(vectors) > dimension-1
     assert type(vectors[0]) is vector_3d
     results = []
     results.append(vectors[0].unit())
     i = 1
-    while i < 3:
+    while i < dimension:
         e = vectors[i]
         temp = vector_3d(0, 0, 0)
         for k in range(i):
@@ -32,7 +32,7 @@ def main():
             vector_3d(-1, 1, -1),
             vector_3d(0, -2, -2)
         ]
-    B_dash = normalization(B)
+    B_dash = orthonormal_basis(B)
     for i in B_dash:
         print(i)
     print( B_dash[0].dot(B_dash[1])  )
