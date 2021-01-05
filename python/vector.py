@@ -16,6 +16,9 @@ class vector_3d(object):
         else:
             return "[{}\n{}\n{}]".format(round(self.x, 3), round(self.y, 3), round(self.z, 3))
 
+    def __neg__(self):
+        return vector_3d(-self.x, -self.y, -self.z, self.ifTransposed)
+
     def __add__(self, vector):
         assert type(vector) is vector_3d
         assert vector.ifTransposed == self.ifTransposed
@@ -69,6 +72,14 @@ class vector_3d(object):
                 self.y * another_vector.y + \
                 self.z * another_vector.z
 
+    def cross(self, another_vector):
+        assert type(another_vector) is vector_3d
+        return  vector_3d(
+                    self.y*another_vector.z - self.z*another_vector.y,
+                    self.z*another_vector.x - self.x*another_vector.z,
+                    self.x*another_vector.y - self.y*another_vector.x
+                )
+
     def proj(self, project_to):
         assert type(project_to) is vector_3d
         return self.dot(project_to)/abs(project_to) * project_to.unit()
@@ -78,11 +89,12 @@ class vector_3d(object):
         return self - self.proj(perpendicular_to)
 
 def main():
+    ERROR = 10**(-10)
     # Verify Vector properties
     P = vector_3d(1, 1, 1)
-    Q = vector_3d(2, 2, 2)
+    Q = vector_3d(2, 3, 3)
     print( (P + Q) == (Q + P) )
-    R = vector_3d(3, 3, 3)
+    R = vector_3d(3, 4, 5)
     print( ((P+Q) + R) == (P + (Q+R)) )
     a = 2
     b = 3
@@ -100,7 +112,7 @@ def main():
     print( P.dot(Q) == Q.dot(P) )
     print( (a*P).dot(Q) == a*(Q.dot(P)) )
     print( P.dot(Q+R) == P.dot(Q) + P.dot(R) )
-    print( abs(P.dot(P) - abs(P)**2) < 0.0000001 )
+    print( abs(P.dot(P) - abs(P)**2) < ERROR )
     print( abs(P.dot(Q)) <= abs(P)*abs(Q) )
     print("-"*10)
     # Verify unit vector
@@ -111,7 +123,21 @@ def main():
     print(Q.proj(S))
     print(Q.perp(S))
     print("-"*10)
-
+    # Verify the cross product
+    T = vector_3d(0, 1, 0)
+    print(S.cross(T))
+    print(T.cross(S))
+    print( abs(P.cross(Q).dot(P) - 0) <  ERROR )
+    print( abs(P.cross(Q).dot(Q) - 0) <  ERROR )
+    print( Q.cross(P) == -(P.cross(Q)) )
+    print( (a*P).cross(Q) == a*(P.cross(Q)) )
+    print( P.cross(Q+R) == P.cross(Q) + P.cross(R) )
+    Z = vector_3d(0, 0, 0)
+    print( P.cross(P) == Z )
+    print( P.cross(Q).dot(R) == R.cross(P).dot(Q) == Q.cross(R).dot(P) == -Q.cross(P).dot(R) )
+    print( P.cross(Q.cross(P)) == P.cross(Q).cross(P) == (P.dot(P)*Q - P.dot(Q)*P) )
+    print( P.cross(Q).cross(R) != P.cross(Q.cross(R)) )
+    print("-"*10)
 
 if __name__ == '__main__':
     main()
