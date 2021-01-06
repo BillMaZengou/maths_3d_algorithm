@@ -1,10 +1,10 @@
-def Sqrt(x):
-    r = x
+def Sqrt(r):
+    x = r
     eplison = 10 ** (-10)
 
-    while abs(x - r * r) > eplison:
-        r = (r + x / r) / 2
-    return r
+    while abs(x * x - r) > eplison:
+        x = (x + r / x) / 2
+    return x
 
 def main():
     import matplotlib.pyplot as plt

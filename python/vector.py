@@ -43,15 +43,15 @@ class vector_3d(object):
         return self * const
 
     def __truediv__(self, const):
-        return 1/const*self
+        return self * (1/const)
 
     def __eq__(self, another_vector):
         assert type(another_vector) is vector_3d
         assert another_vector.ifTransposed == self.ifTransposed
         error = 10 ** (-10)
-        if (self.x - another_vector.x < error
-        and self.y - another_vector.y < error
-        and self.z - another_vector.z < error):
+        if (abs(self.x - another_vector.x) < error
+        and abs(self.y - another_vector.y) < error
+        and abs(self.z - another_vector.z) < error):
             return True
         else:
             return False
