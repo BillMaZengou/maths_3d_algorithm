@@ -23,19 +23,22 @@ def orthonormal_basis(vectors, dimension=3):
     return results
 
 def main():
+    ERROR = 10**(-10)
     A = vector_3d(1, 2, 3)
     B = vector_3d(-2, 2, 4)
     C = vector_3d(7, -8, 6)
     print(triangle_area(A, B, C))
-    B = [
+    K = [
             vector_3d(maths.Sqrt(2)/2, maths.Sqrt(2)/2, 0),
             vector_3d(-1, 1, -1),
             vector_3d(0, -2, -2)
         ]
-    B_dash = orthonormal_basis(B)
-    for i in B_dash:
+    K_dash = orthonormal_basis(K)
+    for i in K_dash:
         print(i)
-    print( B_dash[0].dot(B_dash[1])  )
+    print( K_dash[0].dot(K_dash[1])  )
+    print( ((A.dot(B))**2 + abs(A.cross(B))**2 - (abs(A)**2 * abs(B)**2)) < ERROR )
+    print( (A.cross(B).cross(C)) == (A.dot(B)*B - (B.dot(C))*A) )
 
 if __name__ == '__main__':
     main()

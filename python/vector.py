@@ -1,10 +1,10 @@
 import math_tools as maths
 
-class vector_3d(object):
+class Vector_3d(object):
     """create a vector in 3d"""
 
-    def __init__(self, x, y, z, ifTransposed=False):
-        super(vector_3d, self).__init__()
+    def __init__(self, x=0, y=0, z=0, ifTransposed=False):
+        super(Vector_3d, self).__init__()
         self.x = x
         self.y = y
         self.z = z
@@ -12,32 +12,32 @@ class vector_3d(object):
 
     def __str__(self):
         if self.ifTransposed:
-            return "[{}\t{}\t{}]".format(round(self.x, 3), round(self.y, 3), round(self.z, 3))
+            return "[{} {} {}]".format(round(self.x, 3), round(self.y, 3), round(self.z, 3))
         else:
             return "[{}\n{}\n{}]".format(round(self.x, 3), round(self.y, 3), round(self.z, 3))
 
     def __neg__(self):
-        return vector_3d(-self.x, -self.y, -self.z, self.ifTransposed)
+        return Vector_3d(-self.x, -self.y, -self.z, self.ifTransposed)
 
     def __add__(self, vector):
-        assert type(vector) is vector_3d
+        assert type(vector) is Vector_3d
         assert vector.ifTransposed == self.ifTransposed
-        return vector_3d(   self.x + vector.x,
+        return Vector_3d(   self.x + vector.x,
                             self.y + vector.y,
                             self.z + vector.z,
                         self.ifTransposed)
 
     def __sub__(self, vector):
-        assert type(vector) is vector_3d
+        assert type(vector) is Vector_3d
         assert vector.ifTransposed == self.ifTransposed
-        return vector_3d(   self.x - vector.x,
+        return Vector_3d(   self.x - vector.x,
                             self.y - vector.y,
                             self.z - vector.z,
                         self.ifTransposed)
 
     def __mul__(self, const):
-        assert type(const) is not vector_3d
-        return vector_3d(self.x*const, self.y*const, self.z*const, self.ifTransposed)
+        assert type(const) is int or float
+        return Vector_3d(self.x*const, self.y*const, self.z*const, self.ifTransposed)
 
     def __rmul__(self, const):
         return self * const
@@ -46,7 +46,7 @@ class vector_3d(object):
         return self * (1/const)
 
     def __eq__(self, another_vector):
-        assert type(another_vector) is vector_3d
+        assert type(another_vector) is Vector_3d
         assert another_vector.ifTransposed == self.ifTransposed
         error = 10 ** (-10)
         if (abs(self.x - another_vector.x) < error
@@ -66,35 +66,35 @@ class vector_3d(object):
         return self/abs(self)
 
     def dot(self, another_vector):
-        assert type(another_vector) is vector_3d
+        assert type(another_vector) is Vector_3d
         assert another_vector.ifTransposed == False
         return  self.x * another_vector.x + \
                 self.y * another_vector.y + \
                 self.z * another_vector.z
 
     def cross(self, another_vector):
-        assert type(another_vector) is vector_3d
-        return  vector_3d(
+        assert type(another_vector) is Vector_3d
+        return  Vector_3d(
                     self.y*another_vector.z - self.z*another_vector.y,
                     self.z*another_vector.x - self.x*another_vector.z,
                     self.x*another_vector.y - self.y*another_vector.x
                 )
 
     def proj(self, project_to):
-        assert type(project_to) is vector_3d
+        assert type(project_to) is Vector_3d
         return self.dot(project_to)/abs(project_to) * project_to.unit()
 
     def perp(self, perpendicular_to):
-        assert type(perpendicular_to) is vector_3d
+        assert type(perpendicular_to) is Vector_3d
         return self - self.proj(perpendicular_to)
 
 def main():
     ERROR = 10**(-10)
     # Verify Vector properties
-    P = vector_3d(1, 1, 1)
-    Q = vector_3d(2, 3, 3)
+    P = Vector_3d(1, 1, 1)
+    Q = Vector_3d(2, 3, 3)
     print( (P + Q) == (Q + P) )
-    R = vector_3d(3, 4, 5)
+    R = Vector_3d(3, 4, 5)
     print( ((P+Q) + R) == (P + (Q+R)) )
     a = 2
     b = 3
@@ -103,7 +103,7 @@ def main():
     print( ((a+b) * P) == (a*P + b*P) )
     print("-"*10)
     # Verify the abs of vector
-    V = vector_3d(3, 4, 0)
+    V = Vector_3d(3, 4, 0)
     print(abs(V))
     print(abs(a*V) == abs(a)*abs(V))
     print(abs(P+Q) <= abs(P) + abs(Q))
@@ -116,7 +116,7 @@ def main():
     print( abs(P.dot(Q)) <= abs(P)*abs(Q) )
     print("-"*10)
     # Verify unit vector
-    S = vector_3d(2, 0, 0)
+    S = Vector_3d(2, 0, 0)
     print(S.unit())
     print("-"*10)
     # Verify vector projection and perpendicularity
@@ -124,7 +124,7 @@ def main():
     print(Q.perp(S))
     print("-"*10)
     # Verify the cross product
-    T = vector_3d(0, 1, 0)
+    T = Vector_3d(0, 1, 0)
     print(S.cross(T))
     print(T.cross(S))
     print( abs(P.cross(Q).dot(P) - 0) <  ERROR )
@@ -132,7 +132,7 @@ def main():
     print( Q.cross(P) == -(P.cross(Q)) )
     print( (a*P).cross(Q) == a*(P.cross(Q)) )
     print( P.cross(Q+R) == P.cross(Q) + P.cross(R) )
-    Z = vector_3d(0, 0, 0)
+    Z = Vector_3d(0, 0, 0)
     print( P.cross(P) == Z )
     print( P.cross(Q).dot(R) == R.cross(P).dot(Q) == Q.cross(R).dot(P) == -Q.cross(P).dot(R) )
     print( P.cross(Q.cross(P)) == P.cross(Q).cross(P) == (P.dot(P)*Q - P.dot(Q)*P) )
