@@ -51,7 +51,6 @@ class Matrix_3d(object):
                             self.c3 - matrix.c3)
 
     def __mul__(self, *args):
-        print(args)
         if self.ifTransposed == False:
             assert len(args) == 1
             r = args[0]
@@ -61,15 +60,9 @@ class Matrix_3d(object):
                     r.ifTransposed == False:
                 return self.c1*r.x + self.c2*r.y + self.c3*r.z
 
-    def __rmul__(self, *args):
-        assert len(args) == 1
-        r = args[0]
-        if isinstance(r, int) or isinstance(r, float):
-            return self * r
-        elif    isinstance(r, Vector_3d) and \
-                r.ifTransposed == True   and \
-                self.ifTransposed == True:
-            return self.c1*r.x + self.c2*r.y + self.c3*r.z
+    def __rmul__(self, const):
+        assert type(const) is float or int
+        return self * const
 
     def __truediv__(self, const):
         return self * (1/const)
@@ -128,15 +121,6 @@ def main():
     I_trans = identity(True)
     print( I == I_trans )
     print(I * i)
-    i = Vector_3d(1, 0, 0, True)
-    j = Vector_3d(0, 1, 0, True)
-    k = Vector_3d(0, 0, 1, True)
-    I_trans2 = Matrix_3d(i, j, k)
-    print(j)
-    print(I_trans2)
-    # k = (I_trans2.__rmul__(j))
-    k = j * I_trans2
-    print( k )
 
 
 if __name__ == '__main__':
