@@ -1,4 +1,4 @@
-from vector import *
+from vector_naive import *
 import math_tools as maths
 
 class Matrix_3d(object):
@@ -59,6 +59,9 @@ class Matrix_3d(object):
             elif    isinstance(r, Vector_3d) and \
                     r.ifTransposed == False:
                 return self.c1*r.x + self.c2*r.y + self.c3*r.z
+            elif    isinstance(r, Matrix_3d) and \
+                    r.ifTransposed == False:
+                return Matrix_3d(self*r.c1, self*r.c2, self*r.c3)
 
     def __rmul__(self, const):
         assert type(const) is float or int
@@ -81,6 +84,13 @@ class Matrix_3d(object):
                 return transposed_matrix(another_matrix) == self
             elif self.ifTransposed == True:
                 return another_matrix == transposed_matrix(self)
+
+    def transpose(self):
+        t = (not self.transpose)
+        c1 = Vector_3d(self.c1.x, self.c1.y, self.c1.z, t)
+        c2 = Vector_3d(self.c2.x, self.c2.y, self.c2.z, t)
+        c3 = Vector_3d(self.c3.x, self.c3.y, self.c3.z, t)
+        return Matrix_3d(c1, c2, c3)
 
 def transposed_matrix(m):
     assert m.ifTransposed == True
@@ -121,6 +131,19 @@ def main():
     I_trans = identity(True)
     print( I == I_trans )
     print(I * i)
+    print(M * N)
+
+    i = Vector_3d(0, 0, 2)
+    j = Vector_3d(3, 0, 0)
+    k = Vector_3d(0, 4, 0)
+    F = Matrix_3d(i, j, k)
+    print(F)
+    print( (a*M) * N == a * (M*N) )
+    print( (M*N) * F == M * (N*F) )
+    print()
+    K = (M*N).transpose()
+    print(K.ifTransposed)
+    print( transposed_matrix((M*N).transpose()) == transposed_matrix(M.transpose())*transposed_matrix(N.transpose()) )
 
 
 if __name__ == '__main__':
